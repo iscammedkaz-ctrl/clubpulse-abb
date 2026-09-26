@@ -1,0 +1,54 @@
+@font-face { font-family: "Noto Sans Arabic"; src: url("NotoSansArabic-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Noto Sans Arabic"; src: url("NotoSansArabic-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+:root { --navy: #1A1A2E; --navy-deep: #0F1624; --card: #1F2A44; --gold: #D4AF37; --accent: #F5A623; --text: #fff; --muted: #C9CCD6; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; color: var(--text); background: radial-gradient(1200px 600px at 50% -10%, #2a2a4a 0%, var(--navy) 45%, var(--navy-deep) 100%) fixed;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.55; }
+html[lang="ar"] body { font-family: "Noto Sans Arabic", system-ui, sans-serif; }
+img { max-width: 100%; }
+.topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 18px; background: rgba(15, 22, 36, .85); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(212, 175, 55, .18); }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 600; letter-spacing: .3px; }
+.brand b { color: var(--gold); }
+.lang { display: flex; gap: 6px; }
+.lang button { border: 1px solid rgba(212, 175, 55, .5); background: transparent; color: var(--text); padding: 6px 12px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 14px; }
+.lang button[aria-pressed="true"] { background: var(--gold); color: var(--navy-deep); font-weight: 700; }
+main { max-width: 980px; margin: 0 auto; padding: 0 18px; }
+.hero { text-align: center; padding: 34px 0 28px; }
+.hero-logo { width: 190px; height: auto; filter: drop-shadow(0 12px 30px rgba(212, 175, 55, .25)); }
+.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-size: 13px; margin: 16px 0 4px; font-weight: 600; }
+html[lang="ar"] .eyebrow { letter-spacing: 0; font-size: 15px; }
+h1 { font-size: clamp(28px, 6vw, 46px); margin: 0 0 10px; color: var(--gold); line-height: 1.15; }
+.lead { color: var(--muted); font-size: clamp(16px, 2.6vw, 19px); max-width: 640px; margin: 0 auto 26px; }
+.btn-apk { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; color: var(--navy-deep);
+  background: linear-gradient(180deg, #F0CF5A 0%, var(--gold) 55%, #B8952B 100%); padding: 18px 30px; border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(212, 175, 55, .35), inset 0 1px 0 rgba(255,255,255,.5); font-size: 20px; min-width: min(100%, 360px);
+  justify-content: center; transition: transform .15s ease, box-shadow .15s ease; animation: glow 2.6s ease-in-out infinite; }
+.btn-apk:hover, .btn-apk:focus-visible { transform: translateY(-2px) scale(1.01); box-shadow: 0 18px 40px rgba(212, 175, 55, .5); }
+.btn-apk .btn-text { display: flex; flex-direction: column; text-align: start; line-height: 1.25; }
+.btn-apk strong { font-size: clamp(19px, 4.4vw, 24px); }
+.btn-apk small { font-size: 13px; opacity: .8; font-weight: 600; }
+@keyframes glow { 0%,100% { box-shadow: 0 14px 34px rgba(212,175,55,.30); } 50% { box-shadow: 0 14px 44px rgba(245,166,35,.55); } }
+.btn-web { display: block; width: fit-content; margin: 16px auto 0; color: var(--gold); border: 1.5px solid var(--gold); padding: 11px 24px; border-radius: 14px; text-decoration: none; font-weight: 600; }
+.btn-web:hover { background: rgba(212, 175, 55, .12); }
+.note { color: var(--muted); font-size: 14px; margin-top: 14px; }
+section h2 { text-align: center; color: var(--gold); font-size: clamp(22px, 4vw, 28px); margin: 0 0 18px; }
+.install { background: rgba(31, 42, 68, .55); border: 1px solid rgba(212, 175, 55, .15); border-radius: 22px; padding: 26px 20px; margin: 10px 0 30px; }
+.install ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.install li { display: flex; gap: 12px; align-items: flex-start; }
+.install p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+.num { flex: 0 0 34px; height: 34px; border-radius: 50%; background: var(--gold); color: var(--navy-deep); display: grid; place-items: center; font-weight: 800; }
+.features .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.features article { background: var(--card); border-radius: 18px; padding: 18px; border: 1px solid rgba(255,255,255,.05); }
+.features h3 { margin: 6px 0 6px; font-size: 18px; }
+.features p { margin: 0; color: var(--muted); font-size: 15px; }
+.ico { font-size: 26px; }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 22px 0 38px; }
+.chips span { border: 1px solid rgba(245, 166, 35, .55); color: var(--accent); padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: 14px; }
+.footer { border-top: 1px solid rgba(212, 175, 55, .18); background: rgba(15, 22, 36, .9); padding: 26px 18px 30px; text-align: center; }
+.sponsor { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; letter-spacing: .5px; }
+.sponsor-logo { background: #fff; border-radius: 12px; padding: 8px 16px; }
+.sponsor-logo img { display: block; height: 40px; width: auto; }
+.copy { color: #8e93a3; font-size: 13px; margin: 16px 0 0; }
+@media (max-width: 420px) { .btn-apk { padding: 16px 18px; gap: 10px; } .brand span { font-size: 15px; } }
