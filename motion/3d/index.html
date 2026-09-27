@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <meta name="theme-color" content="#070B14"/>
 <title>ClubPulse · Bézier 3D</title>
-<link rel="icon" href="../assets/favicon.png"/>
-<link rel="stylesheet" href="../assets/bezier.css"/>
+<link rel="icon" href="../../assets/favicon.png"/>
+<link rel="stylesheet" href="../../assets/bezier.css"/>
 <style>
   :root { --navy:#070B14; --card:#121A2C; --gold:#D4AF37; --ink:#F4F1EA; --muted:#9AA3B5; }
   * { box-sizing: border-box; }
@@ -50,6 +50,7 @@
 <header>
   <h1>Bézier cubique 3D</h1>
   <a href="../">Courbes 2D</a>
+  · <a href="../smooth/">Lissage</a>
 </header>
 <p class="lead">
   En CSS, une courbe de Bézier est <b>2D</b> : le temps sur X, la progression sur Y.
@@ -70,6 +71,7 @@
   <div class="eq">B(t) = (1−t)³P₀ + 3(1−t)²t P₁ + 3(1−t)t² P₂ + t³ P₃ &nbsp;·&nbsp; t ∈ [0,1]</div>
   <div class="pts" id="pts"></div>
 </div>
+<script src="../../assets/smooth.js"></script>
 <script>
 (function () {
   const cvs = document.getElementById("c");
@@ -80,7 +82,7 @@
     loop:  [[-70,  0, 40],[  80,-90, 20],[-80, 90,-30],[ 70,  0,-20]]
   };
   let P = presets.helix.map((p) => p.slice());
-  let angX = 0.35, angY = 0.7, auto = true, tAnim = 0, playing = true;
+  let angX = 0.35, angY = 0.7, tgtX = 0.35, tgtY = 0.7, auto = true, tAnim = 0, playing = true;
   const labels = ["P0 départ", "P1 tangente", "P2 tangente", "P3 arrivée"];
   const colors = ["#F0D78C", "#7EC8E3", "#7EC8E3", "#3DDC97"];
 
@@ -158,7 +160,11 @@
   }
 
   function tick(ts) {
-    if (auto) angY += 0.008;
+    if (auto) tgtY += 0.008;
+    if (window.K3CHSmooth) {
+      angX = K3CHSmooth.ema(angX, tgtX, 0.12);
+      angY = K3CHSmooth.ema(angY, tgtY, 0.12);
+    } else { angX = tgtX; angY = tgtY; }
     if (playing) tAnim = (tAnim + 0.006) % 1;
     draw();
     requestAnimationFrame(tick);
@@ -169,8 +175,8 @@
   cvs.addEventListener("pointerdown", (e) => { last = [e.clientX, e.clientY]; auto = false; cvs.setPointerCapture(e.pointerId); });
   cvs.addEventListener("pointermove", (e) => {
     if (!last) return;
-    angY += (e.clientX - last[0]) * 0.01;
-    angX += (e.clientY - last[1]) * 0.01;
+    tgtY += (e.clientX - last[0]) * 0.01;
+    tgtX += (e.clientY - last[1]) * 0.01;
     last = [e.clientX, e.clientY];
   });
   cvs.addEventListener("pointerup", () => { last = null; });
