@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ClubPulse · Kalman</title>
+<link rel="icon" href="../../assets/favicon.png"/>
+<style>
+  body { margin:0; background:#070B14; color:#F4F1EA; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; padding:16px 16px 40px; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p { color:#9AA3B5; font-size:13px; margin:0 0 12px; line-height:1.45; }
+  a { color:#D4AF37; }
+  canvas { width:100%; height:240px; background:#0A101C; border-radius:16px; display:block; }
+  label { display:block; font-size:12px; color:#9AA3B5; margin:10px 0 4px; }
+  input { width:100%; }
+  .eq { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#C9B27A; background:#121A2C; padding:10px; border-radius:12px; margin-top:12px; }
+  .leg { display:flex; gap:14px; font-size:12px; color:#9AA3B5; margin:8px 0 0; }
+  .leg i { display:inline-block; width:12px; height:3px; margin-right:6px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<h1>Filtre de Kalman 1D</h1>
+<p>
+  Deux temps : <b>prédire</b> où le point va (modèle + bruit Q), puis <b>corriger</b> avec la mesure (bruit R).
+  R élevé = on croit le modèle (lisse, tardif). Q élevé = on croit le capteur (nerveux).
+  Touchez le canvas. <a href="../smooth/">Lissage</a> · <a href="../physics/">Physique</a> · <a href="../../premium/">App</a>
+</p>
+<canvas id="c"></canvas>
+<div class="leg">
+  <span><i style="background:#9AA3B5"></i>mesure</span>
+  <span><i style="background:#7EC8E3"></i>EMA</span>
+  <span><i style="background:#D4AF37"></i>Kalman</span>
+</div>
+<label>Q bruit du modèle <span id="qv">8</span></label>
+<input id="q" type="range" min="0.4" max="40" step="0.4" value="8"/>
+<label>R bruit de mesure <span id="rv">40</span></label>
+<input id="r" type="range" min="4" max="200" step="2" value="40"/>
+<p class="eq">
+  x̂ₖ|ₖ₋₁ = x̂ₖ₋₁ + v·Δt<br/>
+  K = P Hᵀ (H P Hᵀ + R)⁻¹<br/>
+  x̂ₖ = x̂ₖ|ₖ₋₁ + K (zₖ − x̂ₖ|ₖ₋₁)
+</p>
+<script src="../../assets/smooth.js"></script>
+<script src="../../assets/kalman.js"></script>
+<script>
+  const cvs = document.getElementById("c");
+  const ctx = cvs.getContext("2d");
+  let raw = [], emaA = [], kalA = [], t = 0, finger = null;
+  let kf = K3CHKalman.unidim();
+  let last = performance.now();
+  function resize() {
+    const d = Math.min(2, devicePixelRatio || 1);
+    cvs.width = cvs.clientWidth * d; cvs.height = cvs.clientHeight * d;
+    ctx.setTransform(d,0,0,d,0,0);
+  }
+  addEventListener("resize", resize); resize();
+  q.oninput = () => qv.textContent = q.value;
+  r.oninput = () => rv.textContent = r.value;
+  function reset() { kf = K3CHKalman.unidim(); }
+  q.addEventListener("change", reset);
+  r.addEventListener("change", reset);
+  cvs.addEventListener("pointerdown", (e) => { finger = e.clientY; cvs.setPointerCapture(e.pointerId); });
+  cvs.addEventListener("pointermove", (e) => { if (finger != null) finger = e.clientY; });
+  cvs.addEventListener("pointerup", () => { finger = null; });
+
+  function line(arr, color, w) {
+    ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = w;
+    arr.forEach((v, i) => i ? ctx.lineTo(i, v) : ctx.moveTo(i, v));
+    ctx.stroke();
+  }
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    t += 1;
+    const h = cvs.clientHeight;
+    let z = h/2 + Math.sin(t*0.08)*34 + Math.sin(t*0.31)*8 + (Math.random()-0.5)*22;
+    if (finger != null) z = finger - cvs.getBoundingClientRect().top;
+    raw.push(z);
+    emaA.push(emaA.length ? K3CHSmooth.ema(emaA[emaA.length-1], z, 0.18) : z);
+    kalA.push(kf(z, dt, +q.value, +r.value).x);
+    if (raw.length > cvs.clientWidth) { raw.shift(); emaA.shift(); kalA.shift(); }
+    ctx.clearRect(0,0,cvs.clientWidth,cvs.clientHeight);
+    line(raw, "rgba(154,163,181,.45)", 1.2);
+    line(emaA, "#7EC8E3", 1.6);
+    line(kalA, "#D4AF37", 2.2);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
