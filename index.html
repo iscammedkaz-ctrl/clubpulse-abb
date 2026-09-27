@@ -11,8 +11,22 @@
   <meta property="og:image" content="assets/logo-abb-full.png">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/splash.css">
 </head>
 <body>
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="splash-scene on" data-scene="club">
+      <div class="ring"></div>
+      <img class="crest" src="assets/logo-abb-emblem.png" alt="ABB">
+      <p class="splash-name">Athletic Bordj El Bahri</p>
+    </div>
+    <div class="splash-scene" data-scene="ad">
+      <p class="kicker">Sponsor officiel</p>
+      <img class="ad-logo" src="assets/sponsor-at-mark.png" alt="Algérie Télécom">
+      <p class="ad-name">Algérie Télécom</p>
+    </div>
+  </div>
+
   <header class="topbar">
     <a class="brand" href="#top">
       <img src="assets/logo-abb-emblem.png" alt="ABB" width="36" height="36">
@@ -76,5 +90,6 @@
   </footer>
 
   <script src="assets/i18n.js"></script>
+  <script src="assets/splash.js"></script>
 </body>
 </html>
