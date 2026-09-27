@@ -533,20 +533,38 @@
     }
     busy = true;
     from.classList.remove("is-active", "in-fwd", "in-back");
-    from.classList.add("is-leave", fwd ? "out-fwd" : "out-back");
+    from.classList.add("is-leave");
     to.classList.remove("out-fwd", "out-back", "is-leave");
-    to.classList.add("is-active", fwd ? "in-fwd" : "in-back");
-    setTimeout(() => {
-      from.className = "screen";
-      to.className = "screen is-active " + (fwd ? "in-fwd" : "in-back");
-      busy = false;
-    }, 300);
+    to.classList.add("is-active");
+    const dir = fwd ? 1 : -1;
+    from.style.transform = "translateX(0)";
+    to.style.transform = "translateX(" + (dir * 36) + "px) scale(.96)";
+    if (window.K3CHPhysics) {
+      K3CHPhysics.spring(from, { x: 0 }, { x: dir * -40 }, { mass: 1, stiff: 160, damp: 22 });
+      K3CHPhysics.spring(to, { x: dir * 36, s: 0.96 }, { x: 0, s: 1 }, { mass: 0.9, stiff: 210, damp: 16 }, () => {
+        from.className = "screen";
+        from.style.transform = "";
+        to.style.transform = "";
+        busy = false;
+      });
+    } else {
+      to.classList.add(fwd ? "in-fwd" : "in-back");
+      from.classList.add(fwd ? "out-fwd" : "out-back");
+      setTimeout(() => {
+        from.className = "screen";
+        to.className = "screen is-active";
+        busy = false;
+      }, 300);
+    }
   }
   document.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", (e) => { e.preventDefault(); go(el.dataset.go); });
   });
   document.querySelectorAll("[data-sw]").forEach((b) => {
-    b.addEventListener("click", () => b.classList.toggle("on"));
+    b.addEventListener("click", () => {
+      if (window.K3CHPhysics) K3CHPhysics.tap(b);
+      b.classList.toggle("on");
+    });
   });
   document.querySelectorAll(".rsvp button").forEach((b) => {
     b.addEventListener("click", () => {
@@ -555,6 +573,7 @@
     });
   });
 </script>
+<script src="../assets/physics.js"></script>
 <script src="../assets/splash.js"></script>
 </body>
 </html>
