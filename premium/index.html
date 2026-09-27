@@ -44,7 +44,26 @@
     width: 38px; height: 38px; border-radius: 12px;
     background: rgba(255,255,255,.05); border: 1px solid var(--line);
     display: grid; place-items: center; position: relative; color: var(--ink); font-size: 15px;
+    cursor: pointer;
   }
+  .sw {
+    width: 44px; height: 26px; border-radius: 999px; background: #2A3348;
+    position: relative; border: 0; padding: 0; cursor: pointer;
+  }
+  .sw.on { background: var(--gold); }
+  .sw i {
+    position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; display: block; transition: left .15s ease; font-style: normal;
+  }
+  .sw.on i { left: 21px; }
+  .pref {
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+    background: var(--card); border: 1px solid rgba(255,255,255,.04);
+    border-radius: 16px; padding: 12px 14px; margin-bottom: 8px;
+  }
+  .pref p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+  .pref h5 { margin: 0; font-size: 14px; }
+  .lock { font-size: 10px; color: var(--gold); letter-spacing: .4px; text-transform: uppercase; }
   .dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; background: #E24B4B; border-radius: 50%; border: 2px solid var(--bg2); }
 
   .hello { padding: 6px 18px 14px; }
@@ -210,8 +229,8 @@
       <div class="t"><b>ClubPulse</b><span>Athletic Bordj El Bahri</span></div>
     </div>
     <div class="icons">
-      <div class="icon">文</div>
-      <div class="icon">🔔<span class="dot"></span></div>
+      <div class="icon" data-go="inbox">文</div>
+      <div class="icon" data-go="inbox" id="bell">🔔<span class="dot"></span></div>
     </div>
   </header>
 
@@ -330,11 +349,56 @@
   </section>
 
   <section id="s-inbox" class="screen hidden">
-    <div class="hello"><p>Club</p><h1>Annonces</h1></div>
+    <div class="hello"><p>6 non lues</p><h1>Notifications</h1></div>
     <section class="block">
+      <div class="hrow"><h4>Fil du club</h4><a href="#" data-go="push">Gérer le push</a></div>
       <div class="list">
-        <div class="item"><div class="badge">📣</div><div><h5>Certificats médicaux</h5><p>À déposer avant le 5 octobre.</p></div></div>
-        <div class="item"><div class="badge">🥊</div><div><h5>Pesée gala</h5><p>Dimanche 13:30 · vestiaires.</p></div></div>
+        <div class="item"><div class="badge">📣</div><div><h5>Certificats médicaux</h5><p>Bureau · à déposer avant le 5 oct. · canal club</p></div></div>
+        <div class="item"><div class="badge">🥊</div><div><h5>Pesée gala</h5><p>Coach · dimanche 13:30 · vestiaires · canal groupe</p></div></div>
+        <div class="item"><div class="badge">⏰</div><div><h5>Rappel · Gala 15:00</h5><p>Dans 2 h · salle du club · canal séance</p></div></div>
+        <div class="item"><div class="badge">📄</div><div><h5>Certificat OK jusqu’au 12 mars</h5><p>Canal documents · pas d’action</p></div></div>
+      </div>
+    </section>
+  </section>
+
+  <section id="s-push" class="screen hidden">
+    <div class="hello"><p>Téléphone · Afrique/Alger</p><h1>Push</h1></div>
+    <section class="block">
+      <div class="pref">
+        <div><h5>Autoriser les push</h5><p>Bandeau écran verrouillé. La cloche in-app reste même si c’est OFF.</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Annonces du bureau</h5><p>Tout le club · certificats, fermeture, AG</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Mon groupe</h5><p>Coach Espoirs boxe seulement</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Rappel de séance</h5><p>2 heures avant l’entraînement ou le gala</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Présence / RSVP</h5><p>Demande de confirmation</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Événements</h5><p>Tournoi, gala, portes ouvertes</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Documents</h5><p>Alerte J-14 et J-2 avant expiration</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Annulation le jour même</h5><p class="lock">Toujours on · passe le silence</p></div>
+        <button class="sw on" type="button" disabled><i></i></button>
+      </div>
+      <div class="pref">
+        <div><h5>Silence 22:00 – 07:00</h5><p>Heure d’Alger. Sauf annulation urgente.</p></div>
+        <button class="sw on" type="button" data-sw><i></i></button>
       </div>
     </section>
   </section>
@@ -346,6 +410,13 @@
       <h2>Documents à jour</h2>
       <div class="meta">Certificat médical · expire le 12 mars 2027</div>
     </article>
+    <section class="block">
+      <div class="item" data-go="push" style="cursor:pointer">
+        <div class="badge">🔔</div>
+        <div><h5>Notifications push</h5><p>Canaux, silence 22h–7h, annulation</p></div>
+        <div class="chev">›</div>
+      </div>
+    </section>
     <aside class="sponsor">
       <div class="lab">
         <em>Sponsor officiel</em>
@@ -372,15 +443,20 @@
 </nav>
 
 <script>
-  const screens = { home: "s-home", plan: "s-plan", club: "s-club", inbox: "s-inbox", me: "s-me" };
+  const screens = { home: "s-home", plan: "s-plan", club: "s-club", inbox: "s-inbox", me: "s-me", push: "s-push" };
   function go(name) {
     Object.values(screens).forEach((id) => document.getElementById(id).classList.add("hidden"));
     document.getElementById(screens[name]).classList.remove("hidden");
     document.querySelectorAll("nav.tab button").forEach((b) => b.classList.toggle("on", b.dataset.go === name));
+    const bell = document.getElementById("bell");
+    if (name === "inbox" && bell) bell.querySelector(".dot")?.remove();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   document.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", (e) => { e.preventDefault(); go(el.dataset.go); });
+  });
+  document.querySelectorAll("[data-sw]").forEach((b) => {
+    b.addEventListener("click", () => b.classList.toggle("on"));
   });
   document.querySelectorAll(".rsvp button").forEach((b) => {
     b.addEventListener("click", () => {
