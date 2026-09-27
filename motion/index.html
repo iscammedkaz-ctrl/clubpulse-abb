@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ClubPulse · Courbes de Bézier</title>
+<link rel="icon" href="../assets/favicon.png"/>
+<link rel="stylesheet" href="../assets/bezier.css"/>
+<style>
+  body {
+    margin: 0; background: #070B14; color: #F4F1EA;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 20px 16px 48px;
+  }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  p { color: #9AA3B5; margin: 0 0 22px; font-size: 14px; }
+  a { color: #D4AF37; }
+  .card {
+    background: #121A2C; border: 1px solid rgba(212,175,55,.18);
+    border-radius: 18px; padding: 14px; margin-bottom: 14px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 15px; color: #F0D78C; }
+  .card code { font-size: 11px; color: #9AA3B5; }
+  .track {
+    position: relative; height: 56px; margin: 12px 0 6px;
+    background: #0A101C; border-radius: 14px; overflow: hidden;
+  }
+  .dot {
+    position: absolute; top: 8px; left: 8px;
+    width: 40px; height: 40px; object-fit: contain;
+    animation: none;
+  }
+  .run .dot { animation: slide 1.6s var(--curve) both; }
+  @keyframes slide {
+    from { left: 8px; }
+    to { left: calc(100% - 48px); }
+  }
+  svg { width: 100%; height: 72px; display: block; margin-top: 6px; }
+  button {
+    border: 0; background: #D4AF37; color: #1A1406;
+    font-weight: 700; border-radius: 12px; padding: 10px 14px;
+    width: 100%; margin-top: 10px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <h1>Courbes de Bézier</h1>
+  <p>Palette ClubPulse. Touchez une carte pour relancer. <a href="../premium/">Retour interface</a></p>
+
+  <article class="card" data-curve="var(--ease-out-expo)">
+    <h2>Sortie expo — pages qui arrivent</h2>
+    <code>cubic-bezier(0.16, 1, 0.3, 1)</code>
+    <div class="track"><img class="dot" src="../assets/logo-abb-emblem.png" alt=""/></div>
+    <svg viewBox="0 0 100 70"><path d="M10 60 C 26 60, 40 10, 90 10" fill="none" stroke="#D4AF37" stroke-width="2"/></svg>
+  </article>
+  <article class="card" data-curve="var(--ease-in-quart)">
+    <h2>Entrée quart — pages qui partent</h2>
+    <code>cubic-bezier(0.5, 0, 0.75, 0)</code>
+    <div class="track"><img class="dot" src="../assets/logo-abb-emblem.png" alt=""/></div>
+    <svg viewBox="0 0 100 70"><path d="M10 60 C 60 60, 85 60, 90 10" fill="none" stroke="#D4AF37" stroke-width="2"/></svg>
+  </article>
+  <article class="card" data-curve="var(--ease-spring)">
+    <h2>Ressort — boutons, interrupteurs</h2>
+    <code>cubic-bezier(0.34, 1.45, 0.64, 1)</code>
+    <div class="track"><img class="dot" src="../assets/logo-abb-emblem.png" alt=""/></div>
+    <svg viewBox="0 0 100 70"><path d="M10 60 C 44 -10, 74 20, 90 10" fill="none" stroke="#D4AF37" stroke-width="2"/></svg>
+  </article>
+  <article class="card" data-curve="var(--ease-soft)">
+    <h2>Doux — cartes, listes</h2>
+    <code>cubic-bezier(0.22, 1, 0.36, 1)</code>
+    <div class="track"><img class="dot" src="../assets/logo-abb-emblem.png" alt=""/></div>
+    <svg viewBox="0 0 100 70"><path d="M10 60 C 32 60, 46 10, 90 10" fill="none" stroke="#D4AF37" stroke-width="2"/></svg>
+  </article>
+  <article class="card" data-curve="var(--ease-hold)">
+    <h2>Hold — flottement logo</h2>
+    <code>cubic-bezier(0.45, 0.05, 0.55, 0.95)</code>
+    <div class="track"><img class="dot" src="../assets/logo-abb-emblem.png" alt=""/></div>
+    <svg viewBox="0 0 100 70"><path d="M10 60 C 55 60, 45 10, 90 10" fill="none" stroke="#D4AF37" stroke-width="2"/></svg>
+  </article>
+  <button type="button" id="all">Relancer toutes</button>
+  <script>
+    function play(card) {
+      card.style.setProperty("--curve", card.dataset.curve);
+      card.classList.remove("run");
+      void card.offsetWidth;
+      card.classList.add("run");
+    }
+    document.querySelectorAll(".card").forEach((c) => {
+      c.addEventListener("click", () => play(c));
+      play(c);
+    });
+    document.getElementById("all").onclick = () => {
+      document.querySelectorAll(".card").forEach(play);
+    };
+  </script>
+</body>
+</html>
