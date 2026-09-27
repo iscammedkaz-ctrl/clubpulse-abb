@@ -17,6 +17,8 @@
     --gold2: #F0D78C;
     --ink: #F4F1EA;
     --muted: #9AA3B5;
+    --ok: #3DDC97;
+    --warn: #E8B84A;
     --safe: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -44,9 +46,11 @@
     display: grid; place-items: center; position: relative; color: var(--ink); font-size: 15px;
   }
   .dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; background: #E24B4B; border-radius: 50%; border: 2px solid var(--bg2); }
+
   .hello { padding: 6px 18px 14px; }
   .hello p { margin: 0; color: var(--muted); font-size: 13px; }
   .hello h1 { margin: 4px 0 0; font-size: 26px; letter-spacing: -.4px; font-weight: 750; }
+
   .member {
     margin: 0 18px 16px; padding: 16px;
     border-radius: 22px;
@@ -73,6 +77,7 @@
   .stats div { background: rgba(0,0,0,.22); border-radius: 14px; padding: 10px 8px; text-align: center; }
   .stats b { display: block; font-size: 16px; color: var(--gold2); }
   .stats span { font-size: 10px; color: var(--muted); }
+
   .next {
     margin: 0 18px 18px; border-radius: 24px; overflow: hidden;
     background: #0A1020; border: 1px solid var(--line);
@@ -99,10 +104,12 @@
   .go { background: var(--gold); color: #1A1406; }
   .maybe { background: var(--card2); color: var(--ink); border: 1px solid var(--line) !important; }
   .no { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,.08) !important; }
+
   section.block { padding: 4px 18px 10px; }
   .hrow { display: flex; justify-content: space-between; align-items: baseline; margin: 6px 0 10px; }
   .hrow h4 { margin: 0; font-size: 16px; }
   .hrow a { color: var(--gold); font-size: 12px; text-decoration: none; font-weight: 600; }
+
   .sports { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
   .sports::-webkit-scrollbar { display: none; }
   .sports button {
@@ -110,6 +117,7 @@
     border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600;
   }
   .sports button.on { background: var(--gold); color: #1A1406; border-color: var(--gold); }
+
   .list { display: flex; flex-direction: column; gap: 10px; }
   .item {
     display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center;
@@ -123,14 +131,17 @@
   .item h5 { margin: 0 0 2px; font-size: 14.5px; }
   .item p { margin: 0; color: var(--muted); font-size: 12px; }
   .chev { color: #667087; font-size: 18px; }
+
   .hidden { display: none !important; }
   .screen { animation: in .28s ease; }
   @keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
   .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 14px; }
   .cal span { text-align: center; font-size: 11px; color: var(--muted); padding: 8px 0; border-radius: 12px; }
   .cal .d { color: var(--ink); background: var(--card); }
   .cal .sel { background: var(--gold); color: #1A1406; font-weight: 800; }
   .cal .has { box-shadow: inset 0 -3px 0 var(--gold); }
+
   nav.tab {
     position: fixed; left: 50%; transform: translateX(-50%);
     bottom: 0; width: min(430px, 100%);
@@ -145,15 +156,54 @@
   }
   nav.tab button i { font-style: normal; font-size: 18px; }
   nav.tab button.on { color: var(--gold2); }
+
   .demo {
     margin: 0 18px 12px; font-size: 11px; color: #C9B27A;
     background: rgba(212,175,55,.08); border: 1px solid var(--line);
     border-radius: 12px; padding: 8px 10px;
   }
+  .sponsor {
+    margin: 8px 18px 6px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: #0A101C;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .sponsor .lab {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .sponsor .lab em {
+    font-style: normal; font-size: 9px; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--gold); font-weight: 700;
+  }
+  .sponsor .lab b { font-size: 13px; font-weight: 650; }
+  .sponsor-logo {
+    background: #fff; border-radius: 10px; padding: 6px 10px;
+    display: grid; place-items: center; min-width: 92px;
+  }
+  .sponsor-logo img { display: block; height: 28px; width: auto; }
+  .sponsor-bar {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(58px + var(--safe)); width: min(430px, 100%);
+    background: rgba(8,12,20,.94); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 6px 12px;
+    color: var(--muted); font-size: 10px; letter-spacing: .6px; text-transform: uppercase;
+  }
+  .sponsor-bar img {
+    height: 18px; width: auto; background: #fff; border-radius: 4px; padding: 2px 6px;
+  }
+  .app { padding-bottom: calc(118px + var(--safe)); }
 </style>
 </head>
 <body>
 <div class="app">
+
   <header class="top">
     <div class="brand">
       <img src="../assets/logo-abb-emblem.png" alt="ABB"/>
@@ -164,12 +214,15 @@
       <div class="icon">🔔<span class="dot"></span></div>
     </div>
   </header>
+
   <div class="demo">Données de démonstration · interface premium proposée</div>
+
   <section id="s-home" class="screen">
     <div class="hello">
       <p>Dimanche 27 septembre</p>
       <h1>Bonjour, Yanis</h1>
     </div>
+
     <article class="member">
       <div class="row">
         <span class="chip">Licence active</span>
@@ -183,6 +236,7 @@
         <div><b>2</b><span>événements</span></div>
       </div>
     </article>
+
     <article class="next">
       <div class="art"><span class="tag">Aujourd’hui · 15:00</span></div>
       <div class="body">
@@ -195,6 +249,7 @@
         </div>
       </div>
     </article>
+
     <section class="block">
       <div class="hrow"><h4>Disciplines</h4><a href="#" data-go="club">Voir le club</a></div>
       <div class="sports">
@@ -204,6 +259,7 @@
         <button>Volley</button>
       </div>
     </section>
+
     <section class="block">
       <div class="hrow"><h4>Cette semaine</h4><a href="#" data-go="plan">Planning</a></div>
       <div class="list">
@@ -224,7 +280,17 @@
         </div>
       </div>
     </section>
+    <aside class="sponsor">
+      <div class="lab">
+        <em>Sponsor officiel</em>
+        <b>Algérie Télécom</b>
+      </div>
+      <div class="sponsor-logo">
+        <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/>
+      </div>
+    </aside>
   </section>
+
   <section id="s-plan" class="screen hidden">
     <div class="hello"><p>Planning</p><h1>Septembre</h1></div>
     <section class="block">
@@ -239,6 +305,7 @@
       </div>
     </section>
   </section>
+
   <section id="s-club" class="screen hidden">
     <div class="hello"><p>Le club</p><h1>Événements</h1></div>
     <section class="block">
@@ -251,7 +318,17 @@
         </div>
       </article>
     </section>
+    <aside class="sponsor">
+      <div class="lab">
+        <em>Sponsor officiel</em>
+        <b>Algérie Télécom</b>
+      </div>
+      <div class="sponsor-logo">
+        <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/>
+      </div>
+    </aside>
   </section>
+
   <section id="s-inbox" class="screen hidden">
     <div class="hello"><p>Club</p><h1>Annonces</h1></div>
     <section class="block">
@@ -261,6 +338,7 @@
       </div>
     </section>
   </section>
+
   <section id="s-me" class="screen hidden">
     <div class="hello"><p>Profil</p><h1>Yanis Benali</h1></div>
     <article class="member">
@@ -268,8 +346,23 @@
       <h2>Documents à jour</h2>
       <div class="meta">Certificat médical · expire le 12 mars 2027</div>
     </article>
+    <aside class="sponsor">
+      <div class="lab">
+        <em>Sponsor officiel</em>
+        <b>Algérie Télécom</b>
+      </div>
+      <div class="sponsor-logo">
+        <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/>
+      </div>
+    </aside>
   </section>
 </div>
+
+<div class="sponsor-bar">
+  Sponsor officiel
+  <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/>
+</div>
+
 <nav class="tab">
   <button class="on" data-go="home"><i>⌂</i>Accueil</button>
   <button data-go="plan"><i>▦</i>Planning</button>
@@ -277,6 +370,7 @@
   <button data-go="inbox"><i>◉</i>Infos</button>
   <button data-go="me"><i>●</i>Profil</button>
 </nav>
+
 <script>
   const screens = { home: "s-home", plan: "s-plan", club: "s-club", inbox: "s-inbox", me: "s-me" };
   function go(name) {
@@ -287,6 +381,12 @@
   }
   document.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", (e) => { e.preventDefault(); go(el.dataset.go); });
+  });
+  document.querySelectorAll(".rsvp button").forEach((b) => {
+    b.addEventListener("click", () => {
+      b.parentElement.querySelectorAll("button").forEach((x) => x.style.outline = "none");
+      b.style.boxShadow = "0 0 0 2px #D4AF37";
+    });
   });
 </script>
 </body>
