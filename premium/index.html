@@ -208,6 +208,12 @@
     border-top: 1px solid var(--line);
     display: grid; grid-template-columns: repeat(5, 1fr);
     padding: 8px 6px calc(10px + var(--safe));
+    position: fixed;
+  }
+  .tab-dot {
+    position: absolute; top: 4px; height: 3px; width: 28px; border-radius: 99px;
+    background: var(--gold); pointer-events: none;
+    left: 0;
   }
   nav.tab button {
     border: 0; background: none; color: #7C8598; font-size: 10px; font-weight: 650;
@@ -501,6 +507,7 @@
 </div>
 
 <nav class="tab">
+  <i class="tab-dot" id="tab-dot"></i>
   <button class="on" data-go="home"><i>⌂</i>Accueil</button>
   <button data-go="plan"><i>▦</i>Planning</button>
   <button data-go="club"><i>◆</i>Club</button>
@@ -572,8 +579,26 @@
       b.style.boxShadow = "0 0 0 2px #D4AF37";
     });
   });
+  (function tabSmooth() {
+    const dot = document.getElementById("tab-dot");
+    if (!dot || !window.K3CHSmooth) return;
+    let x = 0;
+    function target() {
+      const on = document.querySelector("nav.tab button.on");
+      if (!on) return x;
+      return on.offsetLeft + on.offsetWidth / 2 - 14;
+    }
+    x = target();
+    function loop() {
+      x = K3CHSmooth.ema(x, target(), 0.16);
+      dot.style.transform = "translateX(" + x + "px)";
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
 </script>
 <script src="../assets/physics.js"></script>
+<script src="../assets/smooth.js"></script>
 <script src="../assets/splash.js"></script>
 </body>
 </html>
