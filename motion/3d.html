@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#070B14"/>
+<title>ClubPulse · Bézier 3D</title>
+<link rel="icon" href="../assets/favicon.png"/>
+<link rel="stylesheet" href="../assets/bezier.css"/>
+<style>
+  :root { --navy:#070B14; --card:#121A2C; --gold:#D4AF37; --ink:#F4F1EA; --muted:#9AA3B5; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--navy); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  header {
+    padding: 16px 16px 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  }
+  header h1 { margin: 0; font-size: 18px; }
+  header a { color: var(--gold); font-size: 13px; text-decoration: none; }
+  .lead { margin: 0 16px 12px; color: var(--muted); font-size: 13px; line-height: 1.45; max-width: 640px; }
+  canvas {
+    display: block; width: 100%; height: min(62vh, 520px);
+    background:
+      radial-gradient(60% 50% at 50% 40%, rgba(212,175,55,.08), transparent 70%),
+      #0A101C;
+    touch-action: none;
+  }
+  .dock { padding: 12px 16px 28px; display: grid; gap: 10px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  button, select {
+    background: var(--card); color: var(--ink); border: 1px solid rgba(212,175,55,.25);
+    border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  button.gold { background: var(--gold); color: #1A1406; border: 0; font-weight: 700; }
+  .eq {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px; color: #C9B27A; background: #121A2C;
+    border-radius: 12px; padding: 10px 12px; overflow-x: auto;
+  }
+  .pts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pt {
+    background: var(--card); border-radius: 12px; padding: 8px 10px; font-size: 11px; color: var(--muted);
+  }
+  .pt b { color: var(--gold); display: block; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Bézier cubique 3D</h1>
+  <a href="./">Courbes 2D</a>
+</header>
+<p class="lead">
+  En CSS, une courbe de Bézier est <b>2D</b> : le temps sur X, la progression sur Y.
+  Ici la même formule avance un point dans l’espace <b>(x, y, z)</b> — trajectoire de logo, caméra, ou pub sponsor.
+  Faites glisser pour orbiter.
+</p>
+<canvas id="c"></canvas>
+<div class="dock">
+  <div class="row">
+    <button class="gold" id="play" type="button">Parcourir</button>
+    <button id="spin" type="button">Rotation auto</button>
+    <select id="preset">
+      <option value="helix">Hélice club</option>
+      <option value="arc">Arc de scène</option>
+      <option value="loop">Boucle sponsor</option>
+    </select>
+  </div>
+  <div class="eq">B(t) = (1−t)³P₀ + 3(1−t)²t P₁ + 3(1−t)t² P₂ + t³ P₃ &nbsp;·&nbsp; t ∈ [0,1]</div>
+  <div class="pts" id="pts"></div>
+</div>
+<script>
+(function () {
+  const cvs = document.getElementById("c");
+  const ctx = cvs.getContext("2d");
+  const presets = {
+    helix: [[-80, 40, 20],[ -10,-70, 70],[ 40, 80,-40],[ 90,-20, 10]],
+    arc:   [[-90, 30,  0],[ -20,-50, 80],[ 20,-50,-80],[ 90, 30,  0]],
+    loop:  [[-70,  0, 40],[  80,-90, 20],[-80, 90,-30],[ 70,  0,-20]]
+  };
+  let P = presets.helix.map((p) => p.slice());
+  let angX = 0.35, angY = 0.7, auto = true, tAnim = 0, playing = true;
+  const labels = ["P0 départ", "P1 tangente", "P2 tangente", "P3 arrivée"];
+  const colors = ["#F0D78C", "#7EC8E3", "#7EC8E3", "#3DDC97"];
+
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    cvs.width = cvs.clientWidth * dpr;
+    cvs.height = cvs.clientHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  function rot(p) {
+    let [x,y,z] = p;
+    let c = Math.cos(angY), s = Math.sin(angY);
+    let x1 = x * c - z * s, z1 = x * s + z * c;
+    c = Math.cos(angX); s = Math.sin(angX);
+    let y1 = y * c - z1 * s, z2 = y * s + z1 * c;
+    return [x1, y1, z2];
+  }
+  function proj(p) {
+    const [x,y,z] = rot(p);
+    const f = 280 / (220 + z);
+    return [cvs.clientWidth / 2 + x * f, cvs.clientHeight / 2 + y * f, f];
+  }
+  function bez(t) {
+    const u = 1 - t, uu = u * u, tt = t * t;
+    const a = uu * u, b = 3 * uu * t, c = 3 * u * tt, d = tt * t;
+    return [
+      a*P[0][0]+b*P[1][0]+c*P[2][0]+d*P[3][0],
+      a*P[0][1]+b*P[1][1]+c*P[2][1]+d*P[3][1],
+      a*P[0][2]+b*P[1][2]+c*P[2][2]+d*P[3][2]
+    ];
+  }
+
+  function draw() {
+    const w = cvs.clientWidth, h = cvs.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(212,175,55,.12)";
+    ctx.lineWidth = 1;
+    for (let i = -3; i <= 3; i++) {
+      const a = proj([i*30, 0, -90]), b = proj([i*30, 0, 90]);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      const c = proj([-90, 0, i*30]), d = proj([90, 0, i*30]);
+      ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.stroke();
+    }
+
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = "rgba(240,215,140,.35)";
+    ctx.beginPath();
+    let q = proj(P[0]); ctx.moveTo(q[0], q[1]);
+    for (let i = 1; i < 4; i++) { q = proj(P[i]); ctx.lineTo(q[0], q[1]); }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = "#D4AF37";
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const p = proj(bez(i / 80));
+      if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+    }
+    ctx.stroke();
+
+    P.forEach((pt, i) => {
+      const s = proj(pt);
+      ctx.fillStyle = colors[i];
+      ctx.beginPath(); ctx.arc(s[0], s[1], 5 + s[2] * 0.4, 0, Math.PI * 2); ctx.fill();
+    });
+
+    const m = proj(bez(tAnim));
+    ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(m[0], m[1], 7, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#D4AF37"; ctx.lineWidth = 2; ctx.stroke();
+  }
+
+  function tick(ts) {
+    if (auto) angY += 0.008;
+    if (playing) tAnim = (tAnim + 0.006) % 1;
+    draw();
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  let last = null;
+  cvs.addEventListener("pointerdown", (e) => { last = [e.clientX, e.clientY]; auto = false; cvs.setPointerCapture(e.pointerId); });
+  cvs.addEventListener("pointermove", (e) => {
+    if (!last) return;
+    angY += (e.clientX - last[0]) * 0.01;
+    angX += (e.clientY - last[1]) * 0.01;
+    last = [e.clientX, e.clientY];
+  });
+  cvs.addEventListener("pointerup", () => { last = null; });
+
+  function list() {
+    document.getElementById("pts").innerHTML = P.map((p, i) =>
+      `<div class="pt"><b>${labels[i]}</b>x ${p[0].toFixed(0)} · y ${p[1].toFixed(0)} · z ${p[2].toFixed(0)}</div>`
+    ).join("");
+  }
+  list();
+  document.getElementById("preset").onchange = (e) => {
+    P = presets[e.target.value].map((p) => p.slice());
+    tAnim = 0; list();
+  };
+  document.getElementById("play").onclick = () => { playing = !playing; };
+  document.getElementById("spin").onclick = () => { auto = !auto; };
+})();
+</script>
+</body>
+</html>
