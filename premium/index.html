@@ -7,6 +7,7 @@
 <title>ClubPulse ABB · Premium</title>
 <link rel="icon" href="../assets/favicon.png"/>
 <link rel="stylesheet" href="../assets/splash.css"/>
+<link rel="stylesheet" href="../assets/bezier.css"/>
 <link rel="stylesheet" href="../assets/motion.css"/>
 <style>
   :root {
@@ -172,10 +173,11 @@
   }
   .screen.is-active { display: block; }
   .screen.is-leave { display: block; position: absolute; inset: 0 auto auto 0; width: 100%; pointer-events: none; }
-  .screen.in-fwd { animation: page-in-fwd .42s cubic-bezier(.22,1,.36,1) both; }
-  .screen.in-back { animation: page-in-back .42s cubic-bezier(.22,1,.36,1) both; }
-  .screen.out-fwd { animation: page-out-fwd .28s ease both; }
-  .screen.out-back { animation: page-out-back .28s ease both; }
+  .screen.in-fwd { animation: page-in-fwd .48s var(--ease-out-expo) both; }
+  .screen.in-back { animation: page-in-back .48s var(--ease-out-expo) both; }
+  .screen.out-fwd { animation: page-out-fwd .32s var(--ease-in-quart) both; }
+  .screen.out-back { animation: page-out-back .32s var(--ease-in-quart) both; }
+  nav.tab button { transition: color .2s var(--ease-soft), transform .28s var(--ease-spring); }
   @keyframes page-in-fwd {
     from { opacity: 0; transform: translate3d(28px, 0, 0) scale(.98); filter: blur(4px); }
     to { opacity: 1; transform: none; filter: none; }
