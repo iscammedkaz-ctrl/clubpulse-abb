@@ -96,6 +96,18 @@
   .stats div { background: rgba(0,0,0,.22); border-radius: 14px; padding: 10px 8px; text-align: center; }
   .stats b { display: block; font-size: 16px; color: var(--gold2); }
   .stats span { font-size: 10px; color: var(--muted); }
+  .sp {
+    margin-top: 12px; display: flex; align-items: center; gap: 8px;
+    position: relative; z-index: 1; color: var(--muted); font-size: 10px;
+    letter-spacing: .8px; text-transform: uppercase;
+  }
+  .sp img { height: 18px; background: #fff; border-radius: 4px; padding: 2px 6px; }
+  .next .spn {
+    position: absolute; right: 12px; bottom: 12px;
+    background: #fff; border-radius: 8px; padding: 5px 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  }
+  .next .spn img { height: 16px; display: block; }
 
   .next {
     margin: 0 18px 18px; border-radius: 24px; overflow: hidden;
@@ -254,10 +266,11 @@
         <div><b>94%</b><span>assiduité</span></div>
         <div><b>2</b><span>événements</span></div>
       </div>
+      <div class="sp">Sponsor officiel <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/></div>
     </article>
 
     <article class="next">
-      <div class="art"><span class="tag">Aujourd’hui · 15:00</span></div>
+      <div class="art"><span class="tag">Aujourd’hui · 15:00</span><span class="spn"><img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/></span></div>
       <div class="body">
         <h3>Gala boxe interne</h3>
         <p class="when">Salle du club · 15:00 – 18:00 · Coach Amine</p>
@@ -323,13 +336,22 @@
         <div class="item"><div class="badge">💪</div><div><h5>Entraînement espoirs</h5><p>Mar. 29 sept. · 18:30 · Salle</p></div><div class="chev">›</div></div>
       </div>
     </section>
+    <aside class="sponsor">
+      <div class="lab">
+        <em>Sponsor officiel</em>
+        <b>Algérie Télécom</b>
+      </div>
+      <div class="sponsor-logo">
+        <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/>
+      </div>
+    </aside>
   </section>
 
   <section id="s-club" class="screen hidden">
     <div class="hello"><p>Le club</p><h1>Événements</h1></div>
     <section class="block">
       <article class="next">
-        <div class="art"><span class="tag">2 octobre</span></div>
+        <div class="art"><span class="tag">2 octobre</span><span class="spn"><img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/></span></div>
         <div class="body">
           <h3>Tournoi Football U13 — Coupe ABB</h3>
           <p class="when">Terrain municipal · 09:00 – 13:00</p>
@@ -409,6 +431,7 @@
       <div class="row"><span class="chip">Adhérent</span><span class="licence">Saison en cours</span></div>
       <h2>Documents à jour</h2>
       <div class="meta">Certificat médical · expire le 12 mars 2027</div>
+      <div class="sp">Sponsor officiel <img src="../assets/sponsor-algerie-telecom.png" alt="Algérie Télécom"/></div>
     </article>
     <section class="block">
       <div class="item" data-go="push" style="cursor:pointer">
