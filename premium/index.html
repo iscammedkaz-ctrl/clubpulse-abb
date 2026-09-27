@@ -165,9 +165,33 @@
   .item p { margin: 0; color: var(--muted); font-size: 12px; }
   .chev { color: #667087; font-size: 18px; }
 
-  .hidden { display: none !important; }
-  .screen { animation: in .28s ease; }
-  @keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .stage { position: relative; min-height: 70vh; }
+  .screen {
+    display: none;
+    will-change: transform, opacity;
+  }
+  .screen.is-active { display: block; }
+  .screen.is-leave { display: block; position: absolute; inset: 0 auto auto 0; width: 100%; pointer-events: none; }
+  .screen.in-fwd { animation: page-in-fwd .42s cubic-bezier(.22,1,.36,1) both; }
+  .screen.in-back { animation: page-in-back .42s cubic-bezier(.22,1,.36,1) both; }
+  .screen.out-fwd { animation: page-out-fwd .28s ease both; }
+  .screen.out-back { animation: page-out-back .28s ease both; }
+  @keyframes page-in-fwd {
+    from { opacity: 0; transform: translate3d(28px, 0, 0) scale(.98); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes page-in-back {
+    from { opacity: 0; transform: translate3d(-28px, 0, 0) scale(.98); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes page-out-fwd {
+    to { opacity: 0; transform: translate3d(-22px, 0, 0) scale(.98); }
+  }
+  @keyframes page-out-back {
+    to { opacity: 0; transform: translate3d(22px, 0, 0) scale(.98); }
+  }
+  nav.tab button { transition: color .2s ease, transform .2s ease; }
+  nav.tab button.on { transform: translateY(-1px); }
 
   .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 14px; }
   .cal span { text-align: center; font-size: 11px; color: var(--muted); padding: 8px 0; border-radius: 12px; }
@@ -250,7 +274,6 @@
   </div>
 </div>
 <div class="app">
-
   <header class="top">
     <div class="brand">
       <img src="../assets/logo-abb-emblem.png" alt="ABB"/>
@@ -264,7 +287,8 @@
 
   <div class="demo">Données de démonstration · interface premium proposée</div>
 
-  <section id="s-home" class="screen">
+  <div class="stage">
+  <section id="s-home" class="screen is-active">
     <div class="hello">
       <p>Dimanche 27 septembre</p>
       <h1>Bonjour, Yanis</h1>
@@ -339,7 +363,7 @@
     </aside>
   </section>
 
-  <section id="s-plan" class="screen hidden">
+  <section id="s-plan" class="screen">
     <div class="hello"><p>Planning</p><h1>Septembre</h1></div>
     <section class="block">
       <div class="cal">
@@ -363,7 +387,7 @@
     </aside>
   </section>
 
-  <section id="s-club" class="screen hidden">
+  <section id="s-club" class="screen">
     <div class="hello"><p>Le club</p><h1>Événements</h1></div>
     <section class="block">
       <article class="next">
@@ -386,7 +410,7 @@
     </aside>
   </section>
 
-  <section id="s-inbox" class="screen hidden">
+  <section id="s-inbox" class="screen">
     <div class="hello"><p>6 non lues</p><h1>Notifications</h1></div>
     <section class="block">
       <div class="hrow"><h4>Fil du club</h4><a href="#" data-go="push">Gérer le push</a></div>
@@ -399,7 +423,7 @@
     </section>
   </section>
 
-  <section id="s-push" class="screen hidden">
+  <section id="s-push" class="screen">
     <div class="hello"><p>Téléphone · Afrique/Alger</p><h1>Push</h1></div>
     <section class="block">
       <div class="pref">
@@ -441,7 +465,7 @@
     </section>
   </section>
 
-  <section id="s-me" class="screen hidden">
+  <section id="s-me" class="screen">
     <div class="hello"><p>Profil</p><h1>Yanis Benali</h1></div>
     <article class="member">
       <div class="row"><span class="chip">Adhérent</span><span class="licence">Saison en cours</span></div>
@@ -466,6 +490,7 @@
       </div>
     </aside>
   </section>
+  </div>
 </div>
 
 <div class="sponsor-bar">
@@ -483,13 +508,37 @@
 
 <script>
   const screens = { home: "s-home", plan: "s-plan", club: "s-club", inbox: "s-inbox", me: "s-me", push: "s-push" };
+  const order = ["home", "plan", "club", "inbox", "me", "push"];
+  let current = "home";
+  let busy = false;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   function go(name) {
-    Object.values(screens).forEach((id) => document.getElementById(id).classList.add("hidden"));
-    document.getElementById(screens[name]).classList.remove("hidden");
+    if (!screens[name] || name === current || busy) return;
+    const from = document.getElementById(screens[current]);
+    const to = document.getElementById(screens[name]);
+    const fwd = order.indexOf(name) >= order.indexOf(current);
+    current = name;
     document.querySelectorAll("nav.tab button").forEach((b) => b.classList.toggle("on", b.dataset.go === name));
     const bell = document.getElementById("bell");
     if (name === "inbox" && bell) bell.querySelector(".dot")?.remove();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+
+    if (reduce) {
+      from.className = "screen";
+      to.className = "screen is-active";
+      return;
+    }
+    busy = true;
+    from.classList.remove("is-active", "in-fwd", "in-back");
+    from.classList.add("is-leave", fwd ? "out-fwd" : "out-back");
+    to.classList.remove("out-fwd", "out-back", "is-leave");
+    to.classList.add("is-active", fwd ? "in-fwd" : "in-back");
+    setTimeout(() => {
+      from.className = "screen";
+      to.className = "screen is-active " + (fwd ? "in-fwd" : "in-back");
+      busy = false;
+    }, 300);
   }
   document.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", (e) => { e.preventDefault(); go(el.dataset.go); });
