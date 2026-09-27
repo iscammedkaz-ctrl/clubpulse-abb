@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ClubPulse · Lissage</title>
+<link rel="icon" href="../../assets/favicon.png"/>
+<style>
+  body { margin:0; background:#070B14; color:#F4F1EA; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; padding:16px 16px 36px; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p { color:#9AA3B5; font-size:13px; margin:0 0 12px; line-height:1.45; }
+  a { color:#D4AF37; }
+  canvas { width:100%; height:220px; background:#0A101C; border-radius:16px; display:block; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  button { border:1px solid rgba(212,175,55,.3); background:#121A2C; color:#F4F1EA; border-radius:999px; padding:8px 12px; font-size:12px; }
+  button.on { background:#D4AF37; color:#1A1406; font-weight:700; border:0; }
+  .eq { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#C9B27A; background:#121A2C; padding:10px; border-radius:12px; }
+</style>
+</head>
+<body>
+<h1>Algorithmes de lissage</h1>
+<p>Signal bruité (gris) vs lissé (or). Touchez le canvas. <a href="../">Bézier</a> · <a href="../physics/">Physique</a> · <a href="../../premium/">App</a></p>
+<canvas id="c"></canvas>
+<div class="row" id="ops"></div>
+<p class="eq" id="eq"></p>
+<script src="../../assets/smooth.js"></script>
+<script>
+  const S = K3CHSmooth;
+  const algos = [
+    { id: "raw", name: "Brut", eq: "xₙ" },
+    { id: "ema", name: "Exponentiel", eq: "ŷ = ŷ + α(x − ŷ)    α = 0.18" },
+    { id: "avg", name: "Moyenne 8", eq: "ŷ = (xₙ−7 + … + xₙ) / 8" },
+    { id: "step", name: "Smoothstep", eq: "t²(3 − 2t)" },
+    { id: "sstep", name: "Smootherstep", eq: "t³(t(6t − 15) + 10)" },
+    { id: "euro", name: "1€ filter", eq: "cutoff = 1.2 + β|ẋ|   (pointeur)" }
+  ];
+  let mode = "ema";
+  const ops = document.getElementById("ops");
+  algos.forEach((a) => {
+    const b = document.createElement("button");
+    b.textContent = a.name; b.dataset.id = a.id;
+    if (a.id === mode) b.className = "on";
+    b.onclick = () => { mode = a.id; [...ops.children].forEach((x) => x.classList.toggle("on", x === b)); eq.textContent = a.eq; reset(); };
+    ops.appendChild(b);
+  });
+  eq.textContent = algos[1].eq;
+
+  const cvs = document.getElementById("c");
+  const ctx = cvs.getContext("2d");
+  let raw = [], sm = [], t = 0, finger = null;
+  let avg = S.movingAvg(8), euro = S.oneEuro(1.2, 0.012);
+  function reset() { raw = []; sm = []; avg = S.movingAvg(8); euro = S.oneEuro(1.2, 0.012); }
+  function resize() {
+    const d = Math.min(2, devicePixelRatio || 1);
+    cvs.width = cvs.clientWidth * d; cvs.height = cvs.clientHeight * d;
+    ctx.setTransform(d,0,0,d,0,0);
+  }
+  addEventListener("resize", resize); resize();
+  cvs.addEventListener("pointerdown", (e) => { finger = e.clientY; cvs.setPointerCapture(e.pointerId); });
+  cvs.addEventListener("pointermove", (e) => { if (finger != null) finger = e.clientY; });
+  cvs.addEventListener("pointerup", () => { finger = null; });
+
+  function sample() {
+    t += 1;
+    const h = cvs.clientHeight;
+    const noise = (Math.sin(t * 0.09) * 28 + Math.sin(t * 0.37) * 10) + (Math.random() - 0.5) * 18;
+    let x = h / 2 + noise;
+    if (finger != null) x = finger - cvs.getBoundingClientRect().top;
+    raw.push(x);
+    let y = x;
+    if (mode === "ema") y = sm.length ? S.ema(sm[sm.length - 1], x, 0.18) : x;
+    else if (mode === "avg") y = avg(x);
+    else if (mode === "step") y = S.lerp(sm[sm.length - 1] || x, x, S.smoothstep(0.35));
+    else if (mode === "sstep") y = S.lerp(sm[sm.length - 1] || x, x, S.smootherstep(0.28));
+    else if (mode === "euro") y = euro(x);
+    sm.push(y);
+    if (raw.length > cvs.clientWidth) { raw.shift(); sm.shift(); }
+  }
+  function line(arr, color, w) {
+    ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = w;
+    arr.forEach((v, i) => { if (i === 0) ctx.moveTo(i, v); else ctx.lineTo(i, v); });
+    ctx.stroke();
+  }
+  function frame() {
+    sample();
+    ctx.clearRect(0, 0, cvs.clientWidth, cvs.clientHeight);
+    line(raw, "rgba(154,163,181,.45)", 1.2);
+    if (mode !== "raw") line(sm, "#D4AF37", 2.2);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
