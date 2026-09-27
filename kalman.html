@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ClubPulse · Kalman</title>
+<style>
+  body { margin:0; background:#070B14; color:#F4F1EA; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; padding:16px 16px 40px; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p { color:#9AA3B5; font-size:13px; margin:0 0 12px; line-height:1.45; }
+  a { color:#D4AF37; }
+  canvas { width:100%; height:240px; background:#0A101C; border-radius:16px; display:block; touch-action:none; }
+  label { display:block; font-size:12px; color:#9AA3B5; margin:10px 0 4px; }
+  input { width:100%; }
+  .eq { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#C9B27A; background:#121A2C; padding:10px; border-radius:12px; margin-top:12px; }
+  .leg { display:flex; gap:14px; font-size:12px; color:#9AA3B5; margin:8px 0 0; }
+</style>
+</head>
+<body>
+<h1>Filtre de Kalman 1D</h1>
+<p>Gris = mesure · Bleu = EMA · Or = Kalman. Touchez le graphique. <a href="premium/">App</a> · <a href="./">Site</a></p>
+<canvas id="c" width="360" height="240"></canvas>
+<div class="leg"><span>mesure</span><span>EMA</span><span>Kalman</span></div>
+<label>Q modèle <span id="qv">8</span></label>
+<input id="q" type="range" min="0.4" max="40" step="0.4" value="8"/>
+<label>R mesure <span id="rv">40</span></label>
+<input id="r" type="range" min="4" max="200" step="2" value="40"/>
+<p class="eq">prédire x + vΔt · corriger avec K(z − x)</p>
+<script>
+function ema(p,n,a){return p+(n-p)*a;}
+function kalman(){
+  var x=0,v=0,p00=1,p01=0,p10=0,p11=1,ok=false;
+  return function(z,dt,q,r){
+    if(!ok){ok=true;x=z;return x;}
+    x=x+v*dt;
+    p00+=dt*(p10+p01)+dt*dt*p11+q*dt; p01+=dt*p11; p10+=dt*p11; p11+=q*dt;
+    var s=p00+r,k0=p00/s,k1=p10/s,y=z-x;
+    x+=k0*y; v+=k1*y;
+    var a=(1-k0)*p00,b=(1-k0)*p01,c=p10-k1*p00,d=p11-k1*p01;
+    p00=a;p01=b;p10=c;p11=d; return x;
+  };
+}
+var cvs=document.getElementById("c"),ctx=cvs.getContext("2d");
+var raw=[],em=[],ka=[],t=0,finger=null,kf=kalman(),last=performance.now();
+function fit(){
+  var d=Math.min(2,devicePixelRatio||1);
+  var w=cvs.clientWidth||360,h=cvs.clientHeight||240;
+  cvs.width=w*d; cvs.height=h*d; ctx.setTransform(d,0,0,d,0,0);
+}
+addEventListener("resize",fit); fit();
+q.oninput=function(){qv.textContent=q.value;kf=kalman();};
+r.oninput=function(){rv.textContent=r.value;kf=kalman();};
+cvs.addEventListener("pointerdown",function(e){finger=e.clientY;cvs.setPointerCapture(e.pointerId);});
+cvs.addEventListener("pointermove",function(e){if(finger!=null)finger=e.clientY;});
+cvs.addEventListener("pointerup",function(){finger=null;});
+function line(arr,col,w){
+  ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;
+  for(var i=0;i<arr.length;i++) i?ctx.lineTo(i,arr[i]):ctx.moveTo(i,arr[i]);
+  ctx.stroke();
+}
+function frame(now){
+  var dt=Math.min(0.05,(now-last)/1000); last=now; t++;
+  var h=cvs.clientHeight||240;
+  var z=h/2+Math.sin(t*0.08)*34+Math.sin(t*0.31)*8+(Math.random()-0.5)*22;
+  if(finger!=null) z=finger-cvs.getBoundingClientRect().top;
+  raw.push(z); em.push(em.length?ema(em[em.length-1],z,0.18):z); ka.push(kf(z,dt,+q.value,+r.value));
+  if(raw.length>Math.max(120,cvs.clientWidth||360)){raw.shift();em.shift();ka.shift();}
+  ctx.clearRect(0,0,cvs.clientWidth||360,h);
+  line(raw,"rgba(154,163,181,.45)",1.2); line(em,"#7EC8E3",1.6); line(ka,"#D4AF37",2.2);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
