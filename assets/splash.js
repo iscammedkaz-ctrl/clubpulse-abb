@@ -20,9 +20,13 @@
     function tick(now) {
       var t = Math.min(1, (now - t0) / ms);
       var e = t * t * (3 - 2 * t);
-      pose(el, bez3(path, e));
+      var p = bez3(path, e);
+      pose(el, p);
       if (t < 1) requestAnimationFrame(tick);
-      else if (!hold) el.classList.remove("bez3-live");
+      else if (window.K3CHPhysics) {
+        var f = 220 / (220 + p[2]);
+        K3CHPhysics.spring(el, { x: p[0] * f, y: p[1] * f, s: f, vx: 50, vy: -18 }, { x: 0, y: 0, s: 1 }, { mass: 0.9, stiff: 200, damp: 16 });
+      } else if (!hold) el.classList.remove("bez3-live");
     }
     requestAnimationFrame(tick);
   }
