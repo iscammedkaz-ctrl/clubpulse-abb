@@ -136,6 +136,14 @@
 }
 @keyframes splash-load { to { width: 100%; } }
 
+.splash .crest.bez3-live,
+.splash .ad-logo.bez3-live,
+.hero-logo.bez3-live,
+.brand img.bez3-live {
+  animation: none !important;
+  will-change: transform, filter;
+  transform-origin: center center;
+}
 @media (prefers-reduced-motion: reduce) {
   .splash::before, .splash .ring, .splash .crest, .crest-wrap::after,
   .splash-sparks i, .splash .ad-logo, .splash-name, .splash-bar b { animation: none; }
