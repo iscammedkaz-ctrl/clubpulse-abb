@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<meta name="theme-color" content="#070B14"/>
+<meta name="theme-color" content="#09090B"/>
 <title>ClubPulse ABB · Premium</title>
 <link rel="icon" href="../assets/favicon.png"/>
 <link rel="stylesheet" href="../assets/splash.css"/>
@@ -11,15 +11,15 @@
 <link rel="stylesheet" href="../assets/motion.css"/>
 <style>
   :root {
-    --bg: #070B14;
-    --bg2: #0C1220;
-    --card: #121A2C;
-    --card2: #172033;
-    --line: rgba(212,175,55,.16);
-    --gold: #D4AF37;
-    --gold2: #F0D78C;
-    --ink: #F4F1EA;
-    --muted: #9AA3B5;
+    --bg: #09090B;
+    --bg2: #111113;
+    --card: #161618;
+    --card2: #1E1E22;
+    --line: rgba(228,193,90,.28);
+    --gold: #E4C15A;
+    --gold2: #F6E7A8;
+    --ink: #F7F4EC;
+    --muted: #B7B1A4;
     --ok: #3DDC97;
     --warn: #E8B84A;
     --safe: env(safe-area-inset-bottom, 0px);
@@ -29,8 +29,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; }
   .app { max-width: 430px; margin: 0 auto; min-height: 100%; position: relative;
     background:
-      radial-gradient(120% 70% at 50% -10%, rgba(212,175,55,.16), transparent 55%),
-      linear-gradient(180deg, #10182A 0%, var(--bg) 38%);
+      radial-gradient(90% 40% at 50% 0%, rgba(228,193,90,.18), transparent 60%),
+      repeating-linear-gradient(90deg, #0C0C0E 0 14px, #141416 14px 16px);
     padding-bottom: calc(88px + var(--safe));
   }
   header.top {
@@ -76,10 +76,9 @@
   .member {
     margin: 0 18px 16px; padding: 16px;
     border-radius: 22px;
-    background:
-      linear-gradient(135deg, rgba(212,175,55,.22), rgba(18,26,44,.4) 42%, #0E1524),
-      var(--card);
-    border: 1px solid rgba(212,175,55,.28);
+    background: linear-gradient(165deg, #F8EFBE 0%, #E8C85C 38%, #C9962A 78%, #8D6A18 100%);
+    color: #16130C;
+    border: 1px solid #F6E7A8;
     box-shadow: 0 18px 40px rgba(0,0,0,.28);
     position: relative; overflow: hidden;
   }
@@ -266,7 +265,39 @@
     height: 22px; width: auto; object-fit: contain; background: transparent; padding: 0;
   }
   .app { padding-bottom: calc(118px + var(--safe)); }
+
+  /* refonte blason : écu or, fond noir, sponsor lisible */
+  .member h2, .member .licence, .member .meta, .member .sp { color: #16130C; }
+  .member .meta { color: #3A2E10; }
+  .member .licence { color: #4A3E22; }
+  .member .chip { background: #14120C; color: #F6E7A8; }
+  .stats div { background: rgba(20,18,12,.12); }
+  .stats b { color: #16130C; }
+  .stats span { color: #3A2E10; }
+  .sp img, .next .spn img, .sponsor-logo img, .sponsor-bar img, .ad-logo {
+    background: #fff; border-radius: 8px; padding: 4px 8px;
+  }
+  .sp img { height: 34px; }
+  .next .spn { background: #fff; border-color: transparent; padding: 6px 8px; }
+  .next .spn img { height: 32px; }
+  .sponsor {
+    background: #fff; color: #141414; border-color: transparent;
+    box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    padding: 14px 14px;
+  }
+  .sponsor .lab em { color: #1E3A8A; letter-spacing: 1.1px; font-size: 11px; }
+  .sponsor .lab b { color: #111; font-size: 18px; font-weight: 800; }
+  .sponsor-logo { background: transparent; border: 0; min-width: 128px; }
+  .sponsor-logo img { height: 46px; }
+  .sponsor-bar {
+    background: #fff; color: #1E3A8A; font-size: 11px; font-weight: 800;
+    letter-spacing: .8px; border-top: 0; padding: 8px 12px; min-height: 52px;
+  }
+  .sponsor-bar img { height: 36px; }
+  .brand .t span { color: var(--gold); }
+  nav.tab { background: rgba(9,9,11,.94); border-top: 1px solid rgba(228,193,90,.25); }
 </style>
+
 </head>
 <body>
 <div id="splash" class="splash" aria-hidden="true">
