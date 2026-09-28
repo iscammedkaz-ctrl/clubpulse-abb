@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClubPulse — Athletic Bordj El Bahri (ABB)</title>
-  <meta name="description" content="ClubPulse, l'application officielle de l'Athletic Bordj El Bahri : inscriptions, planning, événements et annonces du club.">
-  <meta name="theme-color" content="#1A1A2E">
+  <meta name="description" content="Site officiel de l'Athletic Bordj El Bahri. L'application ClubPulse : inscriptions, planning, événements.">
+  <meta name="theme-color" content="#09090B">
   <meta property="og:title" content="ClubPulse — Athletic Bordj El Bahri">
-  <meta property="og:description" content="Téléchargez l'application Android du club ABB.">
+  <meta property="og:description" content="Site du club ABB et application Android.">
   <meta property="og:image" content="assets/logo-abb-full.png">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="assets/style.css">
@@ -30,51 +30,49 @@
   </div>
 
   <header class="topbar">
-    <a class="brand" href="#top">
-      <img src="assets/logo-abb-emblem.png" alt="ABB" width="36" height="36">
-      <span>ClubPulse <b>ABB</b></span>
-    </a>
-    <nav class="lang" aria-label="Langue / Language / اللغة">
-      <button type="button" data-lang="fr" lang="fr">FR</button>
-      <button type="button" data-lang="ar" lang="ar">عربي</button>
-      <button type="button" data-lang="en" lang="en">EN</button>
-    </nav>
+    <div class="wrap bar">
+      <a class="brand" href="#top">
+        <img src="assets/logo-abb-emblem.png" alt="" width="42" height="42">
+        <span>Athletic <b>Bordj El Bahri</b></span>
+      </a>
+      <nav class="sitenav">
+        <a href="#club">Le club</a>
+        <a href="#app">L'application</a>
+        <a href="#install">Installer</a>
+      </nav>
+      <nav class="lang" aria-label="Langue">
+        <button type="button" data-lang="fr" lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="ar" lang="ar">AR</button>
+        <button type="button" data-lang="en" lang="en">EN</button>
+      </nav>
+    </div>
   </header>
 
   <main id="top">
-    <section class="hero">
-      <img class="hero-logo" src="assets/logo-abb-full.png" alt="Athletic Bordj El Bahri" width="220">
-      <p class="eyebrow" data-i18n="eyebrow">Application officielle du club</p>
-      <h1 data-i18n="title">Athletic Bordj El Bahri</h1>
-      <p class="lead" data-i18n="lead">Inscriptions, planning des entraînements, événements et annonces du club — dans votre poche.</p>
-
-      <a class="btn-apk" id="apk-link" href="ClubPulse-ABB-release.apk" download>
-        <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.87 3.22A11.4 11.4 0 0 0 12 8.1c-1.77 0-3.43.4-4.88 1.02L5.25 5.9a.4.4 0 0 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
-        <span class="btn-text">
-          <strong data-i18n="download">Télécharger l'APK Android</strong>
-          <small><span data-i18n="apkMeta">Version</span> 1.1.0 · <span dir="ltr">57</span> <span data-i18n="mb">Mo</span></small>
-        </span>
-      </a>
-      <a class="btn-web" id="web-link" href="app/" data-i18n="openWeb">Ouvrir la démo web</a>
-      <a class="btn-web" href="premium/">Voir l’interface premium</a>
-      <a class="btn-web" href="motion/">Courbes de Bézier</a>
-      <a class="btn-web" href="motion/3d/">Bézier 3D</a>
-      <a class="btn-web" href="motion/physics/">Physique ressort</a>
-      <a class="btn-web" href="motion/smooth/">Lissage</a>
-      <a class="btn-web" href="motion/kalman/">Kalman</a>
-      <p class="note" data-i18n="note">Gratuit · Android 7.0 ou plus · Français, العربية, English</p>
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <img class="hero-logo" src="assets/logo-abb-full.png" alt="Athletic Bordj El Bahri" width="120">
+        <p class="eyebrow" data-i18n="eyebrow">Application officielle du club</p>
+        <h1 data-i18n="title">Athletic Bordj El Bahri</h1>
+        <p class="lead" data-i18n="lead">Inscriptions, planning des entraînements, événements et annonces du club — dans votre poche.</p>
+        <div class="actions">
+          <a class="btn-apk" id="apk-link" href="ClubPulse-ABB-release.apk" download>
+            <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.87 3.22A11.4 11.4 0 0 0 12 8.1c-1.77 0-3.43.4-4.88 1.02L5.25 5.9a.4.4 0 0 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
+            <span class="btn-text">
+              <strong data-i18n="download">Télécharger l'APK Android</strong>
+              <small><span data-i18n="apkMeta">Version</span> 1.1.0 · <span dir="ltr">57</span> <span data-i18n="mb">Mo</span></small>
+            </span>
+          </a>
+          <a class="btn-web" id="web-link" href="app/" data-i18n="openWeb">Ouvrir la démo web</a>
+        </div>
+        <p class="note" data-i18n="note">Gratuit · Android 7.0 ou plus · Français, العربية, English</p>
+      </div>
+      <aside class="hero-device" id="app" aria-label="Aperçu de l'application">
+        <iframe src="premium/" title="Application ClubPulse ABB"></iframe>
+      </aside>
     </section>
 
-    <section class="install">
-      <h2 data-i18n="installTitle">Installer en 3 étapes</h2>
-      <ol>
-        <li><span class="num">1</span><div><b data-i18n="s1t">Téléchargez</b><p data-i18n="s1">Touchez le bouton doré ci-dessus depuis votre téléphone Android.</p></div></li>
-        <li><span class="num">2</span><div><b data-i18n="s2t">Autorisez</b><p data-i18n="s2">Si Android le demande, autorisez l'installation depuis votre navigateur (« sources inconnues »).</p></div></li>
-        <li><span class="num">3</span><div><b data-i18n="s3t">Ouvrez</b><p data-i18n="s3">Ouvrez le fichier téléchargé, installez, puis lancez ClubPulse ABB.</p></div></li>
-      </ol>
-    </section>
-
-    <section class="features">
+    <section class="features wrap" id="club">
       <h2 data-i18n="featuresTitle">Tout le club dans une app</h2>
       <div class="grid">
         <article><div class="ico">📝</div><h3 data-i18n="f1t">Inscription en ligne</h3><p data-i18n="f1">Créez votre dossier, joignez vos documents et suivez sa validation.</p></article>
@@ -86,12 +84,21 @@
         <span data-i18n="d1">Football</span><span data-i18n="d2">Boxe</span><span data-i18n="d3">Natation</span><span data-i18n="d4">Volleyball</span>
       </div>
     </section>
+
+    <section class="install wrap" id="install">
+      <h2 data-i18n="installTitle">Installer en 3 étapes</h2>
+      <ol>
+        <li><span class="num">1</span><div><b data-i18n="s1t">Téléchargez</b><p data-i18n="s1">Touchez le bouton doré ci-dessus depuis votre téléphone Android.</p></div></li>
+        <li><span class="num">2</span><div><b data-i18n="s2t">Autorisez</b><p data-i18n="s2">Si Android le demande, autorisez l'installation depuis votre navigateur (« sources inconnues »).</p></div></li>
+        <li><span class="num">3</span><div><b data-i18n="s3t">Ouvrez</b><p data-i18n="s3">Ouvrez le fichier téléchargé, installez, puis lancez ClubPulse ABB.</p></div></li>
+      </ol>
+    </section>
   </main>
 
   <footer class="footer">
-    <div class="sponsor">
+    <div class="wrap sponsor">
       <span data-i18n="sponsor">Sponsor officiel</span>
-      <div class="sponsor-logo"><img src="assets/sponsor-algerie-telecom.png" alt="Algérie Télécom" height="40"></div>
+      <div class="sponsor-logo"><img src="assets/sponsor-at-mark.png" alt="Algérie Télécom" height="48"></div>
     </div>
     <p class="copy">© <span id="year">2026</span> Athletic Bordj El Bahri · <span data-i18n="city">Bordj El Bahri, Alger</span></p>
   </footer>
