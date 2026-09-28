@@ -1,54 +1,124 @@
 @font-face { font-family: "Noto Sans Arabic"; src: url("NotoSansArabic-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Noto Sans Arabic"; src: url("NotoSansArabic-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
-:root { --navy: #1A1A2E; --navy-deep: #0F1624; --card: #1F2A44; --gold: #D4AF37; --accent: #F5A623; --text: #fff; --muted: #C9CCD6; }
+:root {
+  --bg: #09090B;
+  --gold: #E4C15A;
+  --gold2: #F6E7A8;
+  --ink: #F7F4EC;
+  --muted: #C8C2B4;
+  --card: #141416;
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; color: var(--text); background: radial-gradient(1200px 600px at 50% -10%, #2a2a4a 0%, var(--navy) 45%, var(--navy-deep) 100%) fixed;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.55; }
+body {
+  margin: 0; color: var(--ink);
+  background:
+    radial-gradient(80% 40% at 50% 0%, rgba(228,193,90,.12), transparent 55%),
+    repeating-linear-gradient(90deg, #0C0C0E 0 18px, #131316 18px 20px);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
 html[lang="ar"] body { font-family: "Noto Sans Arabic", system-ui, sans-serif; }
 img { max-width: 100%; }
-.topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 10px 18px; background: rgba(15, 22, 36, .85); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(212, 175, 55, .18); }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 600; letter-spacing: .3px; }
+.wrap { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(9,9,11,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(228,193,90,.28);
+}
+.bar { display: flex; align-items: center; gap: 28px; min-height: 72px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 650; }
+.brand img { width: 42px; height: 42px; object-fit: contain; }
 .brand b { color: var(--gold); }
+.sitenav { display: flex; gap: 22px; margin-inline-start: auto; }
+.sitenav a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 600; }
+.sitenav a:hover { color: var(--gold); }
 .lang { display: flex; gap: 6px; }
-.lang button { border: 1px solid rgba(212, 175, 55, .5); background: transparent; color: var(--text); padding: 6px 12px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 14px; }
-.lang button[aria-pressed="true"] { background: var(--gold); color: var(--navy-deep); font-weight: 700; }
-main { max-width: 980px; margin: 0 auto; padding: 0 18px; }
-.hero { text-align: center; padding: 34px 0 28px; }
-.hero-logo { width: 190px; height: auto; filter: drop-shadow(0 12px 30px rgba(212, 175, 55, .25)); }
-.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-size: 13px; margin: 16px 0 4px; font-weight: 600; }
+.lang button {
+  border: 1px solid rgba(228,193,90,.5); background: transparent; color: var(--ink);
+  padding: 6px 12px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 14px;
+}
+.lang button[aria-pressed="true"] { background: var(--gold); color: #16130C; font-weight: 700; }
+
+.hero {
+  display: grid; grid-template-columns: 1.15fr .72fr; gap: 48px;
+  align-items: center; padding: 48px 0 24px; text-align: start;
+}
+.hero-logo { width: 112px; height: auto; display: block; margin: 0 0 8px; }
+.eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 13px; margin: 8px 0 4px; font-weight: 700; }
 html[lang="ar"] .eyebrow { letter-spacing: 0; font-size: 15px; }
-h1 { font-size: clamp(28px, 6vw, 46px); margin: 0 0 10px; color: var(--gold); line-height: 1.15; }
-.lead { color: var(--muted); font-size: clamp(16px, 2.6vw, 19px); max-width: 640px; margin: 0 auto 26px; }
-.btn-apk { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; color: var(--navy-deep);
-  background: linear-gradient(180deg, #F0CF5A 0%, var(--gold) 55%, #B8952B 100%); padding: 18px 30px; border-radius: 18px;
-  box-shadow: 0 14px 34px rgba(212, 175, 55, .35), inset 0 1px 0 rgba(255,255,255,.5); font-size: 20px; min-width: min(100%, 360px);
-  justify-content: center; transition: transform .15s ease, box-shadow .15s ease; animation: glow 2.6s ease-in-out infinite; }
-.btn-apk:hover, .btn-apk:focus-visible { transform: translateY(-2px) scale(1.01); box-shadow: 0 18px 40px rgba(212, 175, 55, .5); }
-.btn-apk .btn-text { display: flex; flex-direction: column; text-align: start; line-height: 1.25; }
-.btn-apk strong { font-size: clamp(19px, 4.4vw, 24px); }
-.btn-apk small { font-size: 13px; opacity: .8; font-weight: 600; }
-@keyframes glow { 0%,100% { box-shadow: 0 14px 34px rgba(212,175,55,.30); } 50% { box-shadow: 0 14px 44px rgba(245,166,35,.55); } }
-.btn-web { display: block; width: fit-content; margin: 16px auto 0; color: var(--gold); border: 1.5px solid var(--gold); padding: 11px 24px; border-radius: 14px; text-decoration: none; font-weight: 600; }
-.btn-web:hover { background: rgba(212, 175, 55, .12); }
-.note { color: var(--muted); font-size: 14px; margin-top: 14px; }
-section h2 { text-align: center; color: var(--gold); font-size: clamp(22px, 4vw, 28px); margin: 0 0 18px; }
-.install { background: rgba(31, 42, 68, .55); border: 1px solid rgba(212, 175, 55, .15); border-radius: 22px; padding: 26px 20px; margin: 10px 0 30px; }
-.install ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.install li { display: flex; gap: 12px; align-items: flex-start; }
-.install p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
-.num { flex: 0 0 34px; height: 34px; border-radius: 50%; background: var(--gold); color: var(--navy-deep); display: grid; place-items: center; font-weight: 800; }
-.features .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.features article { background: var(--card); border-radius: 18px; padding: 18px; border: 1px solid rgba(255,255,255,.05); }
-.features h3 { margin: 6px 0 6px; font-size: 18px; }
-.features p { margin: 0; color: var(--muted); font-size: 15px; }
-.ico { font-size: 26px; }
-.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 22px 0 38px; }
-.chips span { border: 1px solid rgba(245, 166, 35, .55); color: var(--accent); padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: 14px; }
-.footer { border-top: 1px solid rgba(212, 175, 55, .18); background: rgba(15, 22, 36, .9); padding: 26px 18px 30px; text-align: center; }
-.sponsor { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; letter-spacing: .5px; }
-.sponsor-logo { background: #fff; border-radius: 12px; padding: 8px 16px; }
-.sponsor-logo img { display: block; height: 40px; width: auto; }
-.copy { color: #8e93a3; font-size: 13px; margin: 16px 0 0; }
-@media (max-width: 420px) { .btn-apk { padding: 16px 18px; gap: 10px; } .brand span { font-size: 15px; } }
+h1 { font-size: clamp(36px, 4vw, 58px); margin: 0 0 12px; color: var(--gold2); line-height: 1.05; }
+.lead { color: var(--muted); font-size: 18px; max-width: 540px; margin: 0 0 22px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn-apk {
+  display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #16130C;
+  background: linear-gradient(180deg, #F8EFBE 0%, #E4C15A 55%, #C9962A 100%);
+  padding: 14px 22px; border-radius: 16px; font-weight: 700;
+}
+.btn-apk small { display: block; font-weight: 600; opacity: .75; }
+.btn-web {
+  display: inline-flex; align-items: center; text-decoration: none; color: var(--gold2);
+  border: 1px solid rgba(228,193,90,.45); padding: 14px 18px; border-radius: 16px; font-weight: 700;
+}
+.note { color: var(--muted); font-size: 13px; margin: 14px 0 0; }
+
+.hero-device {
+  height: 740px; border-radius: 28px; overflow: hidden;
+  border: 1px solid rgba(228,193,90,.45);
+  box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  background: #000;
+}
+.hero-device iframe { width: 100%; height: 100%; border: 0; background: #09090B; }
+
+.features, .install { padding: 28px 0 10px; }
+h2 { font-size: 28px; margin: 0 0 16px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid article {
+  background: rgba(20,20,22,.92); border: 1px solid rgba(228,193,90,.2);
+  border-radius: 18px; padding: 16px;
+}
+.grid h3 { margin: 8px 0 6px; font-size: 16px; }
+.grid p { margin: 0; color: var(--muted); font-size: 14px; }
+.ico { font-size: 22px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+.chips span {
+  border: 1px solid rgba(228,193,90,.4); color: var(--gold2);
+  border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 700;
+}
+.install ol {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.install li {
+  display: flex; gap: 12px; background: rgba(20,20,22,.92);
+  border: 1px solid rgba(228,193,90,.2); border-radius: 18px; padding: 16px;
+}
+.num {
+  flex: 0 0 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #16130C;
+  font-weight: 800; display: grid; place-items: center;
+}
+.install p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+.footer { margin-top: 36px; background: #fff; color: #161616; }
+.sponsor {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 88px;
+}
+.sponsor span {
+  font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #1E3A8A; font-size: 14px;
+}
+.sponsor-logo img { height: 48px; width: auto; display: block; }
+.copy { margin: 0; padding: 0 0 18px; text-align: center; color: #444; font-size: 13px; }
+
+@media (max-width: 980px) {
+  .sitenav { display: none; }
+  .hero { grid-template-columns: 1fr; padding-top: 28px; }
+  .hero-device { height: 640px; }
+  .grid { grid-template-columns: 1fr 1fr; }
+  .install ol { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrap { width: min(1180px, calc(100% - 28px)); }
+  .grid { grid-template-columns: 1fr; }
+  .hero-device { height: 560px; }
+}
